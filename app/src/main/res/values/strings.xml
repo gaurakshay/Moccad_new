@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">Moccad_new</string>
+    <string name="app_name">MOCCAD Home</string>
     <string name="action_settings">Settings</string>
     <string name="main_activity_head">Namaste!!!</string>
+    <string name="main_activity_button">Fetch results</string>
+    <string name="title_activity_query_results">Query Results</string>
+    <string name="query_result">Query Results</string>
+    <string name="disp_json_btn">Display Results</string>
+    <string name="fetch_json_btn">Fetch Query Results</string>
 </resources>

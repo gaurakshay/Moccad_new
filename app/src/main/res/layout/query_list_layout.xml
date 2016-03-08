@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/upper_lin_layout">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.20"
+            android:layout_height="match_parent"
+            android:id="@+id/tx_log_id"
+            android:text="logid"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceSmall"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.80"
+            android:id="@+id/tx_log_date"
+            android:text="logdate"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceSmall"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/lower_lin_layout"
+        android:layout_below="@+id/upper_lin_layout">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:id="@+id/tx_pat_id"
+            android:text="patid"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.20"
+            android:id="@+id/tx_doc_id"
+            android:text="docid"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:id="@+id/tx_diagnosis"
+            android:layout_below="@+id/upper_lin_layout"
+            android:layout_toRightOf="@+id/tx_doc_id"
+            android:text="diagnosis"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
