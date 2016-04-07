@@ -7,11 +7,14 @@ import android.os.Bundle;
 //import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 //import android.view.Menu;
 //import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.EditText; //Import for the IP Address text field.
+import android.widget.Button; //Import for the connect button.
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +27,10 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     String json_string;
+    EditText ipAddress; //Text field for IP Address.
+    Button button,
+            queryButton;
+    String ip; // String for IP
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,25 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         TextView tview = (TextView) findViewById(R.id.txtview);
         tview.setText("Please click on button below to fetch data from table.");
+
+        TextView ipText = (TextView) findViewById(R.id.ip_text);
+        ipText.setText("Enter the IP address of the database server");
+
+        button = (Button)findViewById(R.id.fetchJson);
+        ipAddress   = (EditText)findViewById(R.id.ip_address);
+        ipAddress.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        queryButton = (Button)findViewById(R.id.queryBuilderButton);
+        queryButton.setOnClickListener(
+            new View.OnClickListener() {
+                public void onClick(View view) {
+                    ip = ipAddress.getText().toString();
+                    Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
+                    i.putExtra("IPAddress", ip);
+                    startActivity(i);
+                }
+            });
+
 
 /*       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     // User Defined functions
     //
     public void fetchJson(View v){
+        ip = ipAddress.getText().toString();
         new BackgroundTask().execute();
     }
 
@@ -58,13 +85,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            strUrl = "http://192.168.0.29:80/create_json.php";
+            strUrl = "http://192.168.0.12:80/create_json.php";
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL url = new URL(strUrl);
+                System.out.println("In doInBackground");
+                System.out.println("IP: " + ip);
+                //URL url = new URL(strUrl);
+                URL url = new URL("http://" + ip + "/create_json.php");
+                System.out.println("URL: " + strUrl);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 InputStream inputStream             = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader       = new BufferedReader(
@@ -83,8 +114,10 @@ public class MainActivity extends AppCompatActivity {
 
 
             } catch (MalformedURLException e) {
+                System.out.println("Threw MalformedURLException");
                 e.printStackTrace();
             } catch (IOException e) {
+                System.out.println("Threw IOException");
                 e.printStackTrace();
             }
             return null;

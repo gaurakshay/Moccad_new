@@ -13,33 +13,57 @@
     tools:showIn="@layout/activity_main"
     tools:context="edu.ou.cs.moccad_new.MainActivity">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:id="@+id/txtview"
+        android:id="@+id/ip_text"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
         android:textAppearance="?android:textAppearanceMedium"/>
+
+    <EditText android:id = "@+id/ip_address"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:hint="IP ADDRESS"
+        android:layout_below="@+id/ip_text"
+        android:layout_alignStart="@+id/fetchJson" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/txtview"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_above="@+id/fetchJson"
+        android:layout_alignStart="@+id/ip_text" />
 
     <Button
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:text="@string/fetch_json_btn"
         android:id="@+id/fetchJson"
-        android:layout_below="@+id/txtview"
-        android:layout_centerHorizontal="true"
-        android:onClick="fetchJson" />
+        android:onClick="fetchJson"
+        android:layout_marginBottom="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
-<!--    <Button
-        android:layout_width="240dp"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/disp_json_btn"
-        android:id="@+id/dispJson"
-        android:layout_marginTop="53dp"
-        android:layout_below="@+id/fetchJson"
+        android:text="Build Query"
+        android:id="@+id/queryBuilderButton"
+        android:layout_below="@+id/ip_address"
         android:layout_centerHorizontal="true"
-        android:onClick="dispJson" />-->
+        android:layout_marginTop="35dp" />
+
+    <!--    <Button
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/disp_json_btn"
+            android:id="@+id/dispJson"
+            android:layout_marginTop="53dp"
+            android:layout_below="@+id/fetchJson"
+            android:layout_centerHorizontal="true"
+            android:onClick="dispJson" />-->
 
 </RelativeLayout>
