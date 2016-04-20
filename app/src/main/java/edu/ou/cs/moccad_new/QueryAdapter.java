@@ -44,11 +44,12 @@ public class QueryAdapter extends ArrayAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = layoutInflater.inflate(R.layout.query_list_layout, parent, false);
             queryHolder = new QueryHolder();
-            queryHolder.tx_logid        = ( TextView ) row.findViewById(R.id.tx_log_id);
+            /*queryHolder.tx_logid        = ( TextView ) row.findViewById(R.id.tx_log_id);
             queryHolder.tx_patid        = ( TextView ) row.findViewById(R.id.tx_pat_id);
             queryHolder.tx_docid        = ( TextView ) row.findViewById(R.id.tx_doc_id);
             queryHolder.tx_date         = ( TextView ) row.findViewById(R.id.tx_log_date);
-            queryHolder.tx_diagnosis    = ( TextView ) row.findViewById(R.id.tx_diagnosis);
+            queryHolder.tx_diagnosis    = ( TextView ) row.findViewById(R.id.tx_diagnosis);*/
+            queryHolder.tx_field = ( TextView ) row.findViewById(R.id.tx_pat_id);
 
             row.setTag(queryHolder);
         }
@@ -57,11 +58,12 @@ public class QueryAdapter extends ArrayAdapter {
         }
 
         QueryDetail queryDetail = (QueryDetail) this.getItem(position);
-        queryHolder.tx_logid.setText(queryDetail.getLog_id());
+/*        queryHolder.tx_logid.setText(queryDetail.getLog_id());
         queryHolder.tx_patid.setText("Pat ID\n" + queryDetail.getPat_id());
         queryHolder.tx_docid.setText("Doc ID\n" + queryDetail.getDoc_id());
         queryHolder.tx_date.setText("Date: " + queryDetail.getLog_date());
-        queryHolder.tx_diagnosis.setText("Diagnosis:\n" + queryDetail.getDiagnosis());
+        queryHolder.tx_diagnosis.setText("Diagnosis:\n" + queryDetail.getDiagnosis());*/
+        queryHolder.tx_field.setText("Field:\n" + queryDetail.getField());
 
 
         return row;
@@ -69,7 +71,7 @@ public class QueryAdapter extends ArrayAdapter {
 
     static class QueryHolder {
 
-        TextView tx_logid, tx_patid, tx_docid, tx_date, tx_diagnosis;
+        TextView tx_logid, tx_patid, tx_docid, tx_date, tx_diagnosis, tx_field;
 
     }
 

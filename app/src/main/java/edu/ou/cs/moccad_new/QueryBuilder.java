@@ -2,8 +2,10 @@ package edu.ou.cs.moccad_new;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.net.URLEncoder;
+
+import edu.ou.cs.cacheprototypelibrary.LRUCacheReplacementManager;
+import edu.ou.cs.cacheprototypelibrary.SemanticQueryCacheContentManager;
+import edu.ou.cs.cacheprototypelibrary.SemanticQueryCacheResolutionManager;
+import edu.ou.cs.cacheprototypelibrary.connection.DataAccessProvider;
+import edu.ou.cs.cacheprototypelibrary.core.cache.Cache;
+import edu.ou.cs.cacheprototypelibrary.core.cache.CacheBuilder;
+import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.DataLoader;
+import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.SemanticCacheDataLoader;
+import edu.ou.cs.cacheprototypelibrary.estimationcache.Estimation;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.Query;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.QuerySegment;
 
 /**
  * Created by Ryan on 3/30/2016.
@@ -38,6 +53,8 @@ public class QueryBuilder extends Activity {
         super.onCreate(save);
         setContentView(R.layout.content_query_builder);
         System.out.println("In QueryBuilder constructor");
+
+        setSemanticCacheDataLoader();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)
@@ -83,10 +100,16 @@ public class QueryBuilder extends Activity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         String selectField = (String)dropdown.getSelectedItem();
+                        String fromTable = selectField.substring(0, selectField.indexOf('.'));
+                            selectField = selectField.substring(selectField.indexOf('.') + 1);
                         String conditionField = (String)dropdown2.getSelectedItem();
                         String condition = queryCondition.getText().toString();
 
-                        System.out.println(selectField + " " + conditionField + " " + condition);
+                        String QUERY = "SELECT " + selectField + " FROM " + fromTable + " WHERE " + conditionField;
+                        if(isConditionText(condition))
+                            QUERY += " = \"" + condition + "\""; //Adds quotation marks for string literals.
+                        else
+                            QUERY += " = " + condition; //No quotation marks for numeric fields
 
                         BackgroundTask task = new BackgroundTask();
                         task.getDBInfo = true;
@@ -95,7 +118,7 @@ public class QueryBuilder extends Activity {
                         {
                             BackgroundTask runQuery = new BackgroundTask();
                             runQuery.getDBInfo = false;
-                            runQuery.query = "SELECT " + selectField + " WHERE " + conditionField + " = \"" + condition + "\"";
+                            runQuery.query = QUERY;
                             String str_result = runQuery.execute().get(); //Call to doInBackground
                         }
                         catch (InterruptedException e)
@@ -106,8 +129,6 @@ public class QueryBuilder extends Activity {
                         {
                             e.printStackTrace();
                         }
-
-
                     }
                 });
     }
@@ -124,11 +145,16 @@ public class QueryBuilder extends Activity {
                 String server = "http://" + IP + "/";
                 URL url;
                 if(this.getDBInfo)
+                {
                     url = new URL(server + "getDBInfo.php");
+                }
                 else
                 {
                     if (query != null)
-                        url = new URL(server + "create_json.php?query=" + query);
+                    {
+                        String encodedURL = URLEncoder.encode(query);
+                        url = new URL(server + "create_json.php?query=" + encodedURL);
+                    }
                     else
                         return "Error: Query is null.";
                 }
@@ -145,7 +171,11 @@ public class QueryBuilder extends Activity {
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
-                buildList(stringBuilder.toString().trim());
+                if(this.getDBInfo)
+                {
+                    buildList(stringBuilder.toString().trim());
+                    return null;
+                }
                 return stringBuilder.toString().trim();
             }
             catch (MalformedURLException e)
@@ -159,6 +189,15 @@ public class QueryBuilder extends Activity {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result != null) {
+                Intent intent = new Intent(getApplicationContext(), QueryResults.class);
+                intent.putExtra("json_string", result);
+                startActivity(intent);
+            }
         }
 
         protected void buildList(String result)
@@ -194,4 +233,55 @@ public class QueryBuilder extends Activity {
         }
     }
 
+    boolean isConditionText(String condition)
+    {
+        for(char c : condition.toCharArray())
+        {
+            if(Character.isLetter(c))
+                return true; //Return true if the condition contains a single letter.
+        }
+        return false;
+    }
+
+    private void setSemanticCacheDataLoader()
+    {
+        Cache<Query, Estimation> mMobileEstimationCache = null;
+        Cache<Query, Estimation> mCloudEstimationCache = null;
+        Cache<Query, QuerySegment> mQueryCache = null;
+        DataLoader mDataLoader = null;
+        DataAccessProvider mDataAccessProvider = null;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        //TODO: Implement getting these values
+        /*int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+        int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
+        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);*/
+
+        int maxQueryCacheSize = 100000000;
+        int maxQueryCacheSegments = 0;
+        boolean useReplacement = true;
+
+		/*build semantic cache manager*/
+        mMobileEstimationCache=null;
+        mCloudEstimationCache=null;
+        // build managers
+        SemanticQueryCacheContentManager contentManager = new SemanticQueryCacheContentManager();
+        SemanticQueryCacheResolutionManager resolutionManager = new SemanticQueryCacheResolutionManager();
+        LRUCacheReplacementManager lruCacheManager = new LRUCacheReplacementManager();
+
+        // build query cache
+        CacheBuilder<Query,QuerySegment> builder = CacheBuilder.<Query,QuerySegment>newBuilder();
+        builder.setCacheContentManager(contentManager);
+        builder.setCacheResolutionManager(resolutionManager);
+        builder.setCacheReplacementManager(lruCacheManager);
+        builder.setMaxSize(maxQueryCacheSize);
+        if (maxQueryCacheSegments > 0)//not default
+        {
+            builder.setMaxSegment(maxQueryCacheSegments);
+        }
+        mQueryCache = builder.build();
+
+        //build cache manager
+        mDataLoader = new SemanticCacheDataLoader(this, mDataAccessProvider, mQueryCache, useReplacement);
+    }
 }

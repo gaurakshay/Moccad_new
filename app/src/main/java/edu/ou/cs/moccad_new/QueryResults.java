@@ -41,30 +41,19 @@ public class QueryResults extends AppCompatActivity {
         listView.setAdapter(queryAdapter);
         try {
             JSON_STRING = sanitizeString(JSON_STRING);
-            System.out.println("JSON String: " + JSON_STRING);
             jsonObject = new JSONObject(JSON_STRING);
-            System.out.println("After new JSONObject.");
-            //JSONObject j = new JSONObject("new string");
             jsonArray = jsonObject.getJSONArray("server_response");
-            int count = 0;
-            String logid, patid, docid, date, diag;
 
+            int count = 0;
+            String field;
+
+            System.out.println("JSON: " + JSON_STRING);
             System.out.println("Before loop.");
             while(count<jsonArray.length()) {
                 JSONObject jo = jsonArray.getJSONObject(count);
-                logid = jo.getString("ComicID");
-                patid = jo.getString("Title");
-                docid = jo.getString("Volume");
-                date = jo.getString("Issue");
-                diag = jo.getString("StoryTitle");
+                field = jo.getString("Field");
 
-                System.out.println("ID: " + logid);
-                System.out.println("Title: " + patid);
-                System.out.println("Volume: " + docid);
-                System.out.println("Issue: " + date);
-                System.out.println("StoryTitle: " + diag);
-
-                QueryDetail queryDetail = new QueryDetail(logid, patid, docid, date, diag);
+                QueryDetail queryDetail = new QueryDetail(field);
 
                 queryAdapter.add(queryDetail);
 

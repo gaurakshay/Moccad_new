@@ -10,6 +10,7 @@ public class QueryDetail {
     String doc_id;
     String log_date;
     String diagnosis;
+    String field;
 
     public QueryDetail ( String logid, String patid, String docid, String date, String diag ){
         setLog_id(logid);
@@ -17,7 +18,18 @@ public class QueryDetail {
         setDoc_id(docid);
         setLog_date(date);
         setDiagnosis(diag);
+    }
 
+    public QueryDetail(String field){
+        setField(field);
+    }
+
+    public String getField(){
+        return this.field;
+    }
+
+    public void setField(String field){
+        this.field = field;
     }
 
     public String getLog_id() {
