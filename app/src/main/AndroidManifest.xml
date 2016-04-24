@@ -36,6 +36,15 @@
 
             <category android:name="android.intent.category.DEFAULT" />
         </activity>
+        <activity
+            android:name=".Weights"
+            android:label="Weights"
+            android:theme="@style/AppTheme.NoActionBar">
+            <action android:name="edu.ou.cs.moccad_new.Weights" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </activity>
+
 
     </application>
 

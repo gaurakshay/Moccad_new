@@ -1,5 +1,6 @@
 package edu.ou.cs.moccad_new;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 //import android.view.Menu;
 //import android.view.MenuItem;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     Button button,
             queryButton;
     String ip; // String for IP
+    Weights weights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +62,51 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-/*       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item
+                return true;
+
+            case R.id.action_enter_weights:
+                weights = new Weights();
+                Intent i = new Intent(getApplicationContext(), weights.getClass());
+                setResult(Activity.RESULT_OK, i);
+                startActivityForResult(i, 1);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1) //GET WEIGHTS
+        {
+            System.out.println("time: " + data.getStringExtra("time"));
+            System.out.println("money: " + data.getStringExtra("money"));
+            System.out.println("power: " + data.getStringExtra("power"));
+
+            System.out.println("TIME: " + weights.getTime());
+            System.out.println("MONEY: " + weights.getMoney());
+            System.out.println("POWER: " + weights.getPower());
+        }
     }
 
     // User Defined functions
