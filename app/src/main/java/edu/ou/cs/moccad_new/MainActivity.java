@@ -32,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
     String json_string;
     EditText ipAddress; //Text field for IP Address.
     Button button,
-            queryButton;
+           queryButton;
     String ip; // String for IP
-    Weights weights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 // User chose the "Settings" item
                 return true;
 
-            case R.id.action_enter_weights:
-                weights = new Weights();
+            case R.id.action_enter_weights: //When WEIGHTS is clicked on the menu.
+                Weights weights = new Weights();
                 Intent i = new Intent(getApplicationContext(), weights.getClass());
                 setResult(Activity.RESULT_OK, i);
-                startActivityForResult(i, 1);
+                startActivityForResult(i, 1); //Starts the Weight activity.
                 return true;
 
             default:
@@ -94,18 +93,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) //Gets the results of activities started with startActivityForResult()
     {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1) //GET WEIGHTS
         {
-            System.out.println("time: " + data.getStringExtra("time"));
-            System.out.println("money: " + data.getStringExtra("money"));
-            System.out.println("power: " + data.getStringExtra("power"));
-
-            System.out.println("TIME: " + weights.getTime());
-            System.out.println("MONEY: " + weights.getMoney());
-            System.out.println("POWER: " + weights.getPower());
+            System.out.println("main activity time: " + data.getStringExtra("time"));
+            System.out.println("main activity money: " + data.getStringExtra("money"));
+            System.out.println("main activity power: " + data.getStringExtra("power"));
         }
     }
 

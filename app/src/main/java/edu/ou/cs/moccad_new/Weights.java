@@ -113,19 +113,18 @@ public class Weights extends AppCompatActivity {
         submitButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        System.out.println("Submit clicked");
                         Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.MainActivity.class);
                         setTime(timeBar.getProgress());
                         setMoney(moneyBar.getProgress());
                         setPower(powerBar.getProgress());
 
-                        i.putExtra("time", getTime());
-                        i.putExtra("money", getMoney());
-                        i.putExtra("power", getPower());
+                        String t = "" + getTime();
+                        String m = "" + getMoney();
+                        String p = "" + getPower();
 
-                        System.out.println("TIME: " + getTime());
-                        System.out.println("MONEY: " + getMoney());
-                        System.out.println("POWER: " + getPower());
+                        i.putExtra("time", t);
+                        i.putExtra("money", m);
+                        i.putExtra("power", p);
 
                         setResult(1, i);
                         finish();
