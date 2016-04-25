@@ -36,8 +36,12 @@ import edu.ou.cs.cacheprototypelibrary.core.cache.CacheBuilder;
 import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.DataLoader;
 import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.SemanticCacheDataLoader;
 import edu.ou.cs.cacheprototypelibrary.estimationcache.Estimation;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.Predicate;
 import edu.ou.cs.cacheprototypelibrary.querycache.query.Query;
 import edu.ou.cs.cacheprototypelibrary.querycache.query.QuerySegment;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.XopYPredicate;
 
 /**
  * Created by Ryan on 3/30/2016.
@@ -47,6 +51,12 @@ public class QueryBuilder extends Activity {
     ArrayList<String> fields;
     Button executeQuery;
     EditText queryCondition;
+
+    Cache<Query, Estimation> mMobileEstimationCache = null;
+    Cache<Query, Estimation> mCloudEstimationCache = null;
+    Cache<Query, QuerySegment> mQueryCache = null;
+    DataLoader mDataLoader = null;
+    DataAccessProvider mDataAccessProvider = null;
 
     protected void onCreate(Bundle save)
     {
@@ -110,6 +120,12 @@ public class QueryBuilder extends Activity {
                             QUERY += " = \"" + condition + "\""; //Adds quotation marks for string literals.
                         else
                             QUERY += " = " + condition; //No quotation marks for numeric fields
+
+                        Query q = new Query(selectField);
+                        try{ q.addPredicate(new XopYPredicate(selectField, "=", conditionField)); }
+                        catch(InvalidPredicateException | TrivialPredicateException e){e.printStackTrace();}
+                        QuerySegment qs = new QuerySegment();
+                        mQueryCache.add(q, qs.filter(q));
 
                         BackgroundTask task = new BackgroundTask();
                         task.getDBInfo = true;
@@ -245,12 +261,6 @@ public class QueryBuilder extends Activity {
 
     private void setSemanticCacheDataLoader()
     {
-        Cache<Query, Estimation> mMobileEstimationCache = null;
-        Cache<Query, Estimation> mCloudEstimationCache = null;
-        Cache<Query, QuerySegment> mQueryCache = null;
-        DataLoader mDataLoader = null;
-        DataAccessProvider mDataAccessProvider = null;
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         //TODO: Implement getting these values
         /*int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
