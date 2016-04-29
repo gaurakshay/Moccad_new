@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.net.URLEncoder;
 
@@ -52,19 +53,11 @@ public class QueryBuilder extends Activity {
     Button executeQuery;
     EditText queryCondition;
 
-    Cache<Query, Estimation> mMobileEstimationCache = null;
-    Cache<Query, Estimation> mCloudEstimationCache = null;
-    Cache<Query, QuerySegment> mQueryCache = null;
-    DataLoader mDataLoader = null;
-    DataAccessProvider mDataAccessProvider = null;
-
     protected void onCreate(Bundle save)
     {
         super.onCreate(save);
         setContentView(R.layout.content_query_builder);
         System.out.println("In QueryBuilder constructor");
-
-        setSemanticCacheDataLoader();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null)
@@ -104,6 +97,13 @@ public class QueryBuilder extends Activity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown2.setAdapter(adapter2);
 
+        MOCCAD mApplication = (MOCCAD)getApplicationContext();
+        if(((MOCCAD) this.getApplication()).getQueryCache() == null) {
+            System.out.println("Creating cache");
+            ((MOCCAD) this.getApplication()).setCacheManager("1");
+        }
+        final Cache<Query, QuerySegment> cache = ((MOCCAD) this.getApplication()).getQueryCache();
+
         queryCondition   = (EditText)findViewById(R.id.queryCondition);
         executeQuery = (Button)findViewById(R.id.executeQuery);
         executeQuery.setOnClickListener(
@@ -125,17 +125,23 @@ public class QueryBuilder extends Activity {
                         try{ q.addPredicate(new XopYPredicate(selectField, "=", conditionField)); }
                         catch(InvalidPredicateException | TrivialPredicateException e){e.printStackTrace();}
                         QuerySegment qs = new QuerySegment();
-                        mQueryCache.add(q, qs.filter(q));
+                        cache.add(q, qs.filter(q));
 
                         BackgroundTask task = new BackgroundTask();
                         task.getDBInfo = true;
 
                         try
                         {
-                            BackgroundTask runQuery = new BackgroundTask();
-                            runQuery.getDBInfo = false;
-                            runQuery.query = QUERY;
-                            String str_result = runQuery.execute().get(); //Call to doInBackground
+                            if(cache.containsKey(q))
+                            {
+                                System.out.println("Running query from cache.");
+                                List<List<String>> tuples = null;
+                                tuples = cache.getCacheContentManager().get(q).getTuples();
+                            }
+                                BackgroundTask runQuery = new BackgroundTask();
+                                runQuery.getDBInfo = false;
+                                runQuery.query = QUERY;
+                                String str_result = runQuery.execute().get(); //Call to doInBackground
                         }
                         catch (InterruptedException e)
                         {
@@ -257,41 +263,5 @@ public class QueryBuilder extends Activity {
                 return true; //Return true if the condition contains a single letter.
         }
         return false;
-    }
-
-    private void setSemanticCacheDataLoader()
-    {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        //TODO: Implement getting these values
-        /*int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
-        int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
-        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);*/
-
-        int maxQueryCacheSize = 100000000;
-        int maxQueryCacheSegments = 0;
-        boolean useReplacement = true;
-
-		/*build semantic cache manager*/
-        mMobileEstimationCache=null;
-        mCloudEstimationCache=null;
-        // build managers
-        SemanticQueryCacheContentManager contentManager = new SemanticQueryCacheContentManager();
-        SemanticQueryCacheResolutionManager resolutionManager = new SemanticQueryCacheResolutionManager();
-        LRUCacheReplacementManager lruCacheManager = new LRUCacheReplacementManager();
-
-        // build query cache
-        CacheBuilder<Query,QuerySegment> builder = CacheBuilder.<Query,QuerySegment>newBuilder();
-        builder.setCacheContentManager(contentManager);
-        builder.setCacheResolutionManager(resolutionManager);
-        builder.setCacheReplacementManager(lruCacheManager);
-        builder.setMaxSize(maxQueryCacheSize);
-        if (maxQueryCacheSegments > 0)//not default
-        {
-            builder.setMaxSegment(maxQueryCacheSegments);
-        }
-        mQueryCache = builder.build();
-
-        //build cache manager
-        mDataLoader = new SemanticCacheDataLoader(this, mDataAccessProvider, mQueryCache, useReplacement);
     }
 }

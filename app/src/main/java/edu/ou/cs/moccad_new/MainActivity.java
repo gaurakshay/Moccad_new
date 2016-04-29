@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, 1); //Starts the Weight activity.
                 return true;
 
+            case R.id.action_display_cache:
+                Intent display_cache = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.Display_cache.class);
+                startActivity(display_cache);
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

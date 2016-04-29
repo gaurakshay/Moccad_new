@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ou.cs.cacheprototypelibrary.querycache.query.Query;
+
 /**
  * Created by akshay on 3/8/16.
  */
@@ -17,6 +19,10 @@ public class QueryAdapter extends ArrayAdapter {
     List list = new ArrayList();
     public QueryAdapter(Context context, int resource) {
         super(context, resource);
+    }
+
+    public QueryAdapter(Context context, int textViewResourceId, List<Query> queries) {
+        super(context, textViewResourceId, queries);
     }
 
     public void add(QueryDetail object) {
