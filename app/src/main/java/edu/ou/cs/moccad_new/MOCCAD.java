@@ -80,10 +80,15 @@ public class MOCCAD extends Application{
         singleton = this;
         //In case of error the stubDataAccessProvider is the provider
         Metadata.init(new StubDataAccessProvider());
+
+        //Setup default preferences here - they are defined in res/xml/preferences.xml
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //HtcOneM7ulPowerReceiver.init(this);
         mDataAccessProvider = new StubDataAccessProvider();
         mOptimizationParameters = new OptimizationParameters();
-        setCacheManager("1");
+
+        //Set the cache manager based on the default preferences.
+        setCacheManager();
         //setOptimizationParameters();
 
         //Intent mainActivity = new Intent(this, edu.ou.cs.moccad_new.MainActivity.class);
@@ -193,9 +198,10 @@ public class MOCCAD extends Application{
         StatisticsManager.createFileWriter();
     }
 
-    public void setCacheManager(String cache_type) {
+    public void setCacheManager()
+    {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        //String cache_type = sharedPref.getString(SettingsActivity.KEY_PREF_CACHE_TYPE, "");
+        String cache_type = sharedPref.getString(SettingsActivity.KEY_PREF_CACHE_TYPE, "");
 
         switch (cache_type) {
             case "0":
@@ -210,7 +216,6 @@ public class MOCCAD extends Application{
             default:
                 setNoCacheDataLoader();
         }
-
     }
 
     public void setCurrentQueryResult(List<List<String>> result)
@@ -250,13 +255,9 @@ public class MOCCAD extends Application{
     private void setSemanticCacheDataLoader()
     {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        /*int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+        int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
         int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
-        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);*/
-
-        int maxQueryCacheSize = 100000000;
-        int maxQueryCacheSegments = 0;
-        boolean useReplacement = true;
+        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
 
 		/*build semantic cache manager*/
         mMobileEstimationCache=null;
@@ -286,21 +287,18 @@ public class MOCCAD extends Application{
     {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        /*int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+        int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
         int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
-        int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
-        int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
-        int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
-        int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
-        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);*/
+        //int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
+        //int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+        //int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
+        //int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+        boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
 
-        int maxQueryCacheSize = 100000000;
-        int maxQueryCacheSegments = 0;
         int maxMobileEstimationCacheSize = 10000000;
         int maxMobileEstimationCacheSegments = 0;
         int maxCloudEstimationCacheSize = 10000000;
         int maxCloudEstimationCacheSegments = 0;
-        boolean useReplacement = true;
 
 		/*build decisional semantic cache data loader*/
 

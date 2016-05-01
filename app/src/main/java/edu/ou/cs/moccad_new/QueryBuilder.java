@@ -100,7 +100,8 @@ public class QueryBuilder extends Activity {
         MOCCAD mApplication = (MOCCAD)getApplicationContext();
         if(((MOCCAD) this.getApplication()).getQueryCache() == null) {
             System.out.println("Creating cache");
-            ((MOCCAD) this.getApplication()).setCacheManager("1");
+            ((MOCCAD) this.getApplication()).setCacheManager();
+            //XXX: I'm not sure what happens here if the user has selected "No Cache" from the settings menu...
         }
         final Cache<Query, QuerySegment> cache = ((MOCCAD) this.getApplication()).getQueryCache();
 

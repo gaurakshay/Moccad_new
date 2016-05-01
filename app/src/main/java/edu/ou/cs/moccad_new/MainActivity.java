@@ -56,9 +56,18 @@ public class MainActivity extends AppCompatActivity {
             new View.OnClickListener() {
                 public void onClick(View view) {
                     ip = ipAddress.getText().toString();
-                    Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
-                    i.putExtra("IPAddress", ip);
-                    startActivity(i);
+                    //TODO: Try to get ip address from preferences?
+                    if(!ip.equals(""))
+                    {
+                        //I put this here in order to prevent the app from crashing if you press "Build Query" without entering an ip address.
+                        Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
+                        i.putExtra("IPAddress", ip);
+                        startActivity(i);
+                    }
+                    else
+                    {
+                        //TODO: Let the user know that they need to input a query address.
+                    }
                 }
             });
     }
@@ -75,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // User chose the "Settings" item
+                Intent display_settings = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(display_settings);
                 return true;
 
             case R.id.action_enter_weights: //When WEIGHTS is clicked on the menu.
@@ -88,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent display_cache = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.Display_cache.class);
                 startActivity(display_cache);
                 return true;
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

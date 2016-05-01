@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/cache_manager_settings">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/pref_cache_type_list_titles"
+            android:entryValues="@array/pref_cache_type_list_values"
+            android:key="pref_cache_type"
+            android:summary="%s"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
+            android:title="@string/pref_cache_type" />
+        <CheckBoxPreference
+            android:key="pref_use_replacement"
+            android:title="@string/pref_use_replacement"
+            android:summary="@string/pref_use_replacement_summ"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/connection_settings">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_data_access_provider_list_titles"
+            android:entryValues="@array/pref_data_access_provider_list_values"
+            android:key="pref_data_access_provider"
+            android:summary="%s"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
+            android:title="@string/pref_data_access_provider" />
+        <EditTextPreference
+            android:defaultValue="127.0.0.1"
+            android:title="@string/pref_ip_address"
+            android:key="pref_ip_address"
+            android:summary="%s"
+            android:hint="@string/pref_ip_address"
+            android:inputType="phone"/>
+        <EditTextPreference
+            android:defaultValue="8080"
+            android:title="@string/pref_port"
+            android:key="pref_port"
+            android:summary="%s"
+            android:hint="@string/pref_port"
+            android:inputType="number"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/query_cache_settings">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_max_number_segment_list_titles"
+            android:entryValues="@array/pref_max_number_segment_list_values"
+            android:key="pref_max_query_cache_number_segment"
+            android:summary="%s"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
+            android:title="@string/pref_max_number_segment" />
+
+        <ListPreference
+            android:defaultValue="100000000"
+            android:entries="@array/pref_max_cache_size_list_titles"
+            android:entryValues="@array/pref_max_cache_size_list_values"
+            android:key="pref_max_query_cache_size"
+            android:summary="%s"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
+            android:title="@string/pref_max_size" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

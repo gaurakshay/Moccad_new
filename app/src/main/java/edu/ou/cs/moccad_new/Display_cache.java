@@ -39,7 +39,8 @@ public class Display_cache extends AppCompatActivity {
         MOCCAD mApplication = (MOCCAD)getApplicationContext();
         if(((MOCCAD) this.getApplication()).getQueryCache() == null) {
             System.out.println("Creating cache");
-            ((MOCCAD) this.getApplication()).setCacheManager("1");
+            ((MOCCAD) this.getApplication()).setCacheManager();
+            //The above won't work if the user has selected "No Cache" from the preferences.
         }
         final Cache<Query, QuerySegment> cache = ((MOCCAD) this.getApplication()).getQueryCache();
 
