@@ -24,7 +24,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.net.URLEncoder;
 
@@ -52,6 +54,7 @@ public class QueryBuilder extends Activity {
     ArrayList<String> fields;
     Button executeQuery;
     EditText queryCondition;
+    Query q;
 
     protected void onCreate(Bundle save)
     {
@@ -122,27 +125,47 @@ public class QueryBuilder extends Activity {
                         else
                             QUERY += " = " + condition; //No quotation marks for numeric fields
 
-                        Query q = new Query(selectField);
-                        try{ q.addPredicate(new XopYPredicate(selectField, "=", conditionField)); }
+                        q = new Query(selectField);
+                        try{ q.addPredicate(new XopYPredicate(conditionField, "=", condition)); }
                         catch(InvalidPredicateException | TrivialPredicateException e){e.printStackTrace();}
                         QuerySegment qs = new QuerySegment();
-                        cache.add(q, qs.filter(q));
 
                         BackgroundTask task = new BackgroundTask();
                         task.getDBInfo = true;
+                        String cachedResults = null;
 
                         try
                         {
                             if(cache.containsKey(q))
                             {
                                 System.out.println("Running query from cache.");
+                                String template = "{\"server_response\":[{\"Field\":\"%s\"}]}";
                                 List<List<String>> tuples = null;
                                 tuples = cache.getCacheContentManager().get(q).getTuples();
+
+                                System.out.println("TUPLES:");
+                                Iterator<List<String>> iter1 = tuples.iterator();
+                                while(iter1.hasNext())
+                                {
+                                    Iterator<String> iter2 = iter1.next().iterator();
+                                    while(iter2.hasNext())
+                                    {
+                                        String fieldValue = iter2.next();
+                                        System.out.println(fieldValue);
+                                        cachedResults = String.format(template, fieldValue);
+
+                                    }
+                                }
                             }
-                                BackgroundTask runQuery = new BackgroundTask();
-                                runQuery.getDBInfo = false;
-                                runQuery.query = QUERY;
-                                String str_result = runQuery.execute().get(); //Call to doInBackground
+                            else {
+                                cache.add(q, qs.filter(q));
+                            }
+
+                            BackgroundTask runQuery = new BackgroundTask();
+                            runQuery.getDBInfo = false;
+                            runQuery.query = QUERY;
+                            runQuery.cachedResults = cachedResults;
+                            String str_result = runQuery.execute().get(); //Call to doInBackground
                         }
                         catch (InterruptedException e)
                         {
@@ -159,6 +182,7 @@ public class QueryBuilder extends Activity {
     class BackgroundTask extends AsyncTask<Void, Void, String> {
         boolean getDBInfo = false;
         String query = null;
+        String cachedResults = null;
 
         @Override
         protected String doInBackground(Void... params) {
@@ -170,6 +194,10 @@ public class QueryBuilder extends Activity {
                 if(this.getDBInfo)
                 {
                     url = new URL(server + "getDBInfo.php");
+                }
+                else if(this.cachedResults != null)
+                {
+                    return cachedResults.trim();
                 }
                 else
                 {
@@ -219,6 +247,13 @@ public class QueryBuilder extends Activity {
             if(result != null) {
                 Intent intent = new Intent(getApplicationContext(), QueryResults.class);
                 intent.putExtra("json_string", result);
+                intent.putExtra("queryRelation",q.getRelation());
+                Set<Predicate> preds = q.getPredicates();
+                Iterator<Predicate> predicateIterator = preds.iterator();
+                if(predicateIterator.hasNext())
+                    intent.putExtra("queryPredicate", predicateIterator.next().toString());
+                else
+                    intent.putExtra("queryPredicate", "");
                 startActivity(intent);
             }
         }

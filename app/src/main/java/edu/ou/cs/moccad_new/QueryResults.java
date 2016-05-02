@@ -17,10 +17,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
+import edu.ou.cs.cacheprototypelibrary.core.cache.Cache;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.Query;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.QuerySegment;
+import edu.ou.cs.cacheprototypelibrary.querycache.query.XopYPredicate;
 
 public class QueryResults extends AppCompatActivity {
 
-    String JSON_STRING;
+    String JSON_STRING,
+            queryRelation,
+            queryPredicate;
     JSONObject jsonObject;
     JSONArray jsonArray;
     QueryAdapter queryAdapter;
@@ -34,6 +44,8 @@ public class QueryResults extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         JSON_STRING = getIntent().getExtras().getString("json_string");
+        queryRelation = getIntent().getExtras().getString("queryRelation");
+        queryPredicate = getIntent().getExtras().getString("queryPredicate");
 
         queryAdapter = new QueryAdapter(this, R.layout.query_list_layout);
 
@@ -47,15 +59,30 @@ public class QueryResults extends AppCompatActivity {
             int count = 0;
             String field;
 
+            MOCCAD mApplication = (MOCCAD)getApplicationContext();
+            if(((MOCCAD) this.getApplication()).getQueryCache() == null) {
+                System.out.println("Creating cache");
+                ((MOCCAD) this.getApplication()).setCacheManager();
+                //XXX: I'm not sure what happens here if the user has selected "No Cache" from the settings menu...
+            }
+            final Cache<Query, QuerySegment> cache = ((MOCCAD) this.getApplication()).getQueryCache();
+            Query query = new Query(this.queryRelation);
+            String[] predicate = queryPredicate.split(" ");
+            try{ query.addPredicate(new XopYPredicate(predicate[0], predicate[1], predicate[2])); }
+            catch(InvalidPredicateException | TrivialPredicateException e){e.printStackTrace();}
+
             System.out.println("JSON: " + JSON_STRING);
             System.out.println("Before loop.");
+            ArrayList<String> tuple = new ArrayList<String>();
             while(count<jsonArray.length()) {
                 JSONObject jo = jsonArray.getJSONObject(count);
                 field = jo.getString("Field");
 
                 QueryDetail queryDetail = new QueryDetail(field);
-
                 queryAdapter.add(queryDetail);
+
+                tuple.add(field);
+                cache.getCacheContentManager().get(query).addTuple(tuple);
 
                 count++;
             }
