@@ -109,6 +109,12 @@
         <item>500000000</item>
     </string-array>
 
+    <string name="set_data_access_provider_message">Setting new data access providerâ€¦</string>
+    <string name="connection_error_message">Impossible to connect to the web service, please check the settings</string>
+    <string name="parsing_error_message">Data format error, the server does not return correct value(s)</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="set_cache_type_message">Setting new cache type</string>
+
 
     <!-- Strings related to Settings -->
 

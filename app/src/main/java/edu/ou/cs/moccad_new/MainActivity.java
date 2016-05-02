@@ -2,10 +2,12 @@ package edu.ou.cs.moccad_new;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.design.widget.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             new View.OnClickListener() {
                 public void onClick(View view) {
                     ip = ipAddress.getText().toString();
-                    //TODO: Try to get ip address from preferences?
                     if(!ip.equals(""))
                     {
                         //I put this here in order to prevent the app from crashing if you press "Build Query" without entering an ip address.
@@ -66,7 +67,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        //TODO: Let the user know that they need to input a query address.
+                        //Try to get the IP address from the preferences.
+                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                        ip = sharedPref.getString(SettingsActivity.KEY_PREF_IP_ADDRESS, "127.0.0.1");
+                        Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
+                        i.putExtra("IPAddress", ip);
+                        startActivity(i);
                     }
                 }
             });

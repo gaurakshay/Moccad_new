@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,6 +55,8 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		String ipAddress = pref.getString(PREF_IP_ADDRESS,"127.0.0.1");
 		String port = pref.getString(PREF_PORT,"8080");
+		Log.i("CloudDataAccessProvider", "Got IP Address: " + ipAddress + " from preferences.");
+		Log.i("CloudDataAccessProvider", "Got Port: " + port + "from preferences.");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
 		urlBaseBuilder.append(ipAddress);

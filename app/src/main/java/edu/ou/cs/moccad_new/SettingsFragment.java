@@ -1,7 +1,12 @@
 package edu.ou.cs.moccad_new;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
-import android.media.audiofx.BassBoost;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -9,14 +14,20 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
+import android.util.Log;
 
 import edu.ou.cs.cacheprototypelibrary.connection.DataAccessProvider;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.DownloadDataException;
+import edu.ou.cs.cacheprototypelibrary.querycache.exception.JSONParserException;
+import edu.ou.cs.cacheprototypelibrary.utils.JSONLoader;
+//import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
+
 
 /**
  * Created by Ryan K. on 5/1/2016.
  */
 public class SettingsFragment extends PreferenceFragment
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+        implements OnSharedPreferenceChangeListener {
 
     private MOCCAD mApplication = null;
     @Override
@@ -93,7 +104,7 @@ public class SettingsFragment extends PreferenceFragment
                 {
                     //StatisticsManager.createFileWriter();
                     //update DataAccessProvider
-                    //(new SetDataAccessProviderTask()).execute();
+                    (new SetDataAccessProviderTask()).execute();
 
                     System.out.println("DEBUG: Data access provider set to value: " + currentValue);
                 }
@@ -152,7 +163,7 @@ public class SettingsFragment extends PreferenceFragment
             }
         }
     }
-        /*
+
         private class SetCacheTypeTask extends AsyncTask<Void, Void, Void>
         {
             ProgressDialog mProgressDialog = null;
@@ -176,5 +187,58 @@ public class SettingsFragment extends PreferenceFragment
             }
 
         }
-        */
+
+        private class SetDataAccessProviderTask extends AsyncTask<Void, Void, Void>
+        {
+            ProgressDialog mProgressDialog = null;
+
+            Exception exception = null;
+
+            @Override
+            protected void onPreExecute() {
+                mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.set_data_access_provider_message));
+
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ((MOCCAD) getActivity().getApplication()).setDataAccessProvider();
+                } catch (DownloadDataException | JSONParserException e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                mProgressDialog.dismiss();
+
+                if (exception != null)
+                {
+                    if (exception instanceof DownloadDataException)
+                    {
+                        Log.e("ERR_CONNECTION",getString(R.string.connection_error_message));
+                        launchErrorDialog(getString(R.string.connection_error),getString(R.string.connection_error_message));
+                    }
+                    else if (exception instanceof JSONParserException)
+                    {
+                        Log.e("ERR_PARSER",getString(R.string.parsing_error_message));
+                        launchErrorDialog(getString(R.string.connection_error),getString(R.string.parsing_error_message));
+                    }
+                }
+
+                super.onPostExecute(result);
+            }
+
+            private void launchErrorDialog(String title, String message)
+            {
+                ErrorDialog errorDialog = ErrorDialog.newInstance(title, message);
+                errorDialog.show(getFragmentManager(),"error_dialog");
+            }
+
+        }
+
+
 }
