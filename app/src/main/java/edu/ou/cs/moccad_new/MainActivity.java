@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                     {
                         //Try to get the IP address from the preferences.
+                        //TODO: It doesn't seem to be working..
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                         ip = sharedPref.getString(SettingsActivity.KEY_PREF_IP_ADDRESS, "127.0.0.1");
                         Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
@@ -93,14 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent display_settings = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(display_settings);
                 return true;
-
+/*
             case R.id.action_enter_weights: //When WEIGHTS is clicked on the menu.
                 Weights weights = new Weights();
                 Intent i = new Intent(getApplicationContext(), weights.getClass());
                 setResult(Activity.RESULT_OK, i);
                 startActivityForResult(i, 1); //Starts the Weight activity.
                 return true;
-
+*/
             case R.id.action_display_cache:
                 Intent display_cache = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.Display_cache.class);
                 startActivity(display_cache);

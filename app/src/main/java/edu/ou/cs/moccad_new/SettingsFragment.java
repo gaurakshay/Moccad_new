@@ -201,6 +201,8 @@ public class SettingsFragment extends PreferenceFragment
                 super.onPreExecute();
             }
 
+
+            //TODO: It doesn't error out like before, but is anything happening here, really? Log it to find out.
             @Override
             protected Void doInBackground(Void... params) {
                 try {

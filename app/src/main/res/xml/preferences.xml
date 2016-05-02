@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Query settings">
+        <Preference android:title="Set Weights">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="edu.ou.cs.moccad_new"
+                android:targetClass="edu.ou.cs.moccad_new.Weights" />
+        </Preference>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/cache_manager_settings">
         <ListPreference
             android:defaultValue="1"

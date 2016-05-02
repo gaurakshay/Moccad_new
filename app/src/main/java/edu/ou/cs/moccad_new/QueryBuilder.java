@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +67,7 @@ public class QueryBuilder extends Activity {
         if(extras != null)
         {
             this.IP = extras.getString("IPAddress");
+            Log.i("QueryBuilder", "Got IPAddress " + this.IP + " as extra data.");
         }
         else
         {
@@ -138,7 +140,10 @@ public class QueryBuilder extends Activity {
                         {
                             if(cache.containsKey(q))
                             {
-                                System.out.println("Running query from cache.");
+                                //System.out.println("Running query from cache.");
+
+                                Log.i("QueryBuilder", "Running query from cache.");
+
                                 String template = "{\"server_response\":[{\"Field\":\"%s\"}]}";
                                 List<List<String>> tuples = null;
                                 tuples = cache.getCacheContentManager().get(q).getTuples();

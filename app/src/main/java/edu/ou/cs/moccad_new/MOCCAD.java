@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -83,6 +84,8 @@ public class MOCCAD extends Application{
 
         //Setup default preferences here - they are defined in res/xml/preferences.xml
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        //The class below is used to calculate power usage.
         //HtcOneM7ulPowerReceiver.init(this);
         mDataAccessProvider = new StubDataAccessProvider();
         mOptimizationParameters = new OptimizationParameters();
@@ -103,6 +106,14 @@ public class MOCCAD extends Application{
     public void setUseReplacement(boolean useReplacement)
     {
         mDataLoader.setUsingReplacement(useReplacement);
+    }
+
+    public void setWeights(int time, int money, int power)
+    {
+        //TODO: Figure out what format to save the stuff in...
+        Log.i("MOCCAD","Time weight set to " + time);
+        Log.i("MOCCAD", "Money weight set to " + money);
+        Log.i("MOCCAD", "Power weight set to " + power);
     }
 
     public void setOptimizationParameters()
