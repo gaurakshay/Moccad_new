@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -79,7 +80,8 @@ public class QueryBuilder extends Activity {
         {
             BackgroundTask task = new BackgroundTask();
             task.getDBInfo = true;
-            String str_result = task.execute().get(); //Call to doInBackground
+            //String str_result = task.execute().get(); //Call to doInBackground
+            task.execute().get();
         }
         catch (InterruptedException e)
         {
@@ -116,16 +118,19 @@ public class QueryBuilder extends Activity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         String selectField = (String)dropdown.getSelectedItem();
-                        String fromTable = selectField.substring(0, selectField.indexOf('.'));
-                            selectField = selectField.substring(selectField.indexOf('.') + 1);
+                        //String fromTable = selectField.substring(0, selectField.indexOf('.'));
+                        //    selectField = selectField.substring(selectField.indexOf('.') + 1);
                         String conditionField = (String)dropdown2.getSelectedItem();
                         String condition = queryCondition.getText().toString();
+                        String fromTable = (String)dropdown.getSelectedItem();
 
-                        String QUERY = "SELECT " + selectField + " FROM " + fromTable + " WHERE " + conditionField;
+                        //String QUERY = "SELECT " + selectField + " FROM " + fromTable + " WHERE " + conditionField;
+                        //String QUERY = "SELECT TOP 5 * FROM " + fromTable + " WHERE " + conditionField;
+                        String QUERY = "SELECT * FROM " + fromTable + " LIMIT 5"; // + " WHERE " + conditionField;
                         if(isConditionText(condition))
                             QUERY += " = \"" + condition + "\""; //Adds quotation marks for string literals.
-                        else
-                            QUERY += " = " + condition; //No quotation marks for numeric fields
+                        //else
+                        //    QUERY += " = " + condition; //No quotation marks for numeric fields
 
                         q = new Query(selectField);
                         try{ q.addPredicate(new XopYPredicate(conditionField, "=", condition)); }
@@ -283,9 +288,10 @@ public class QueryBuilder extends Activity {
                 while(count<jsonArray.length()) {
                     JSONObject jo = jsonArray.getJSONObject(count);
                     table = jo.getString("TABLE_NAME");
-                    column = jo.getString("COLUMN_NAME");
+                    //column = jo.getString("COLUMN_NAME");
 
-                    fields.add(table + "." + column);
+                    //fields.add(table + "." + column);
+                    fields.add(table);
 
                     count++;
                 }

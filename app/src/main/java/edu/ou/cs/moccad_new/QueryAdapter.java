@@ -65,9 +65,9 @@ public class QueryAdapter extends ArrayAdapter {
 
         QueryDetail queryDetail = (QueryDetail) this.getItem(position);
 /*        queryHolder.tx_logid.setText(queryDetail.getLog_id());
+        queryHolder.tx_date.setText("Date: " + queryDetail.getLog_date());
         queryHolder.tx_patid.setText("Pat ID\n" + queryDetail.getPat_id());
         queryHolder.tx_docid.setText("Doc ID\n" + queryDetail.getDoc_id());
-        queryHolder.tx_date.setText("Date: " + queryDetail.getLog_date());
         queryHolder.tx_diagnosis.setText("Diagnosis:\n" + queryDetail.getDiagnosis());*/
         queryHolder.tx_field.setText("Field:\n" + queryDetail.getField());
 
