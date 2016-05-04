@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
     // User Defined functions
     //
     public void fetchJson(View v){
-        ip = ipAddress.getText().toString();
-        new BackgroundTask().execute();
+        //ip = ipAddress.getText().toString();
+        //new BackgroundTask().execute();
     }
 
 
