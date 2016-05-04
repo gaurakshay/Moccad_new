@@ -213,7 +213,11 @@ public class QueryBuilder extends Activity {
                     if (query != null)
                     {
                         String encodedURL = URLEncoder.encode(query);
-                        url = new URL(server + "create_json.php?query=" + encodedURL);
+                        int timeParam = ((MOCCAD) getApplication()).getTime();
+                        int moneyParam = ((MOCCAD) getApplication()).getMoney();
+                        int powerParam = ((MOCCAD) getApplication()).getPower();
+                        url = new URL(server + "create_json.php?query=" + encodedURL +
+                                "&time=" + timeParam + "&money=" + moneyParam + "&power=" + powerParam);
                     }
                     else
                         return "Error: Query is null.";

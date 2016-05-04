@@ -41,6 +41,9 @@ import edu.ou.cs.cacheprototypelibrary.utils.StatisticsManager;
 public class MOCCAD extends Application{
 
     private static MOCCAD singleton;
+    int time = 0,
+        money = 0,
+        power = 0;
 
     public MOCCAD getInstance(){
         return singleton;
@@ -114,6 +117,10 @@ public class MOCCAD extends Application{
         Log.i("MOCCAD","Time weight set to " + time);
         Log.i("MOCCAD", "Money weight set to " + money);
         Log.i("MOCCAD", "Power weight set to " + power);
+
+        setTime(time);
+        setMoney(money);
+        setPower(power);
     }
 
     public void setOptimizationParameters()
@@ -367,5 +374,29 @@ public class MOCCAD extends Application{
 
         //build cache manager
         mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters, useReplacement);
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }
