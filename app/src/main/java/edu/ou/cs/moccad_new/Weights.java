@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class Weights extends AppCompatActivity {
     int time = 0,
@@ -55,7 +56,7 @@ public class Weights extends AppCompatActivity {
         powerBar = (SeekBar)findViewById(R.id.powerSeekBar);
 
         //timeBar.setOnSeekBarChangeListener(this);
-        /*timeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        timeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -70,6 +71,11 @@ public class Weights extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 setTime(progress);
+                TextView timeLabel = (TextView) findViewById(R.id.timeNumber);
+                if(timeLabel != null) {
+                    String prog = "" + progress;
+                    timeLabel.setText(prog);
+                }
             }
         });
 
@@ -88,6 +94,12 @@ public class Weights extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 setMoney(progress);
+                TextView moneyLabel = (TextView) findViewById(R.id.moneyNumber);
+                if(moneyLabel != null) {
+                    String prog = "" + progress;
+                    moneyLabel.setText(prog);
+                }
+
             }
         });
 
@@ -106,8 +118,14 @@ public class Weights extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 setPower(progress);
+                TextView powerLabel = (TextView) findViewById(R.id.energyNumber);
+                if(powerLabel != null) {
+                    String prog = "" + progress;
+                    powerLabel.setText(prog);
+                }
+
             }
-        });*/
+        });
 
         submitButton = (Button)findViewById(R.id.submit_weights);
         submitButton.setOnClickListener(
