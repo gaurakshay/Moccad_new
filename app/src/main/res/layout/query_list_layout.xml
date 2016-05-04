@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="100dp">
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +13,7 @@
             android:layout_weight="0.20"
             android:layout_height="match_parent"
             android:id="@+id/tx_log_id"
-            android:text="logid"
+            android:text="LogID"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceSmall"/>
         <TextView
@@ -20,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.80"
             android:id="@+id/tx_log_date"
-            android:text="logdate"
+            android:text="LogDate"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceSmall"/>
 
@@ -37,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:id="@+id/tx_pat_id"
-            android:text="patid"
+            android:text="PatID"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceMedium"/>
 
@@ -46,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.20"
             android:id="@+id/tx_doc_id"
-            android:text="docid"
+            android:text="DocID"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceMedium"/>
 
@@ -58,7 +59,7 @@
             android:id="@+id/tx_diagnosis"
             android:layout_below="@+id/upper_lin_layout"
             android:layout_toRightOf="@+id/tx_doc_id"
-            android:text="diagnosis"
+            android:text="Diagnosis"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceMedium"/>
 

@@ -8,14 +8,15 @@
     tools:context="edu.ou.cs.moccad_new.QueryBuilder">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="SELECT RELATION: "
-        android:id="@+id/textView" />
+        android:text="Select Relation: "
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"/>
 
     <Spinner
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
         android:layout_gravity="center_horizontal" />
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="WHERE: "
+        android:text="Define Predicates: "
         android:id="@+id/textView2" />
 
     <Spinner
@@ -37,7 +38,7 @@
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="IS EQUAL TO"
+        android:text="is equal to"
         android:id="@+id/textView3" />
 
     <EditText

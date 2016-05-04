@@ -35,7 +35,7 @@
             android:positiveButtonText="@string/ok"
             android:title="@string/pref_data_access_provider" />
         <EditTextPreference
-            android:defaultValue="127.0.0.1"
+            android:defaultValue="192.168.122.1"
             android:title="@string/pref_ip_address"
             android:key="pref_ip_address"
             android:summary="%s"

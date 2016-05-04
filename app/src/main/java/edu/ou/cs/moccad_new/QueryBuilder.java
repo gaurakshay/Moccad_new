@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -311,4 +310,11 @@ public class QueryBuilder extends Activity {
         }
         return false;
     }
+
+
+    public void addPredicate(View v) {
+
+
+    }
+
 }

@@ -31,10 +31,8 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    String json_string;
     EditText ipAddress; //Text field for IP Address.
-    Button button,
-           queryButton;
+    Button queryButton;
     String ip; // String for IP
 
     @Override
@@ -43,13 +41,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView tview = (TextView) findViewById(R.id.txtview);
-        tview.setText("Please click on button below to fetch data from table.");
 
         TextView ipText = (TextView) findViewById(R.id.ip_text);
         ipText.setText("Enter the IP address of the database server");
 
-        button = (Button)findViewById(R.id.fetchJson);
         ipAddress   = (EditText)findViewById(R.id.ip_address);
         ipAddress.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -70,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         //Try to get the IP address from the preferences.
                         //TODO: It doesn't seem to be working..
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        ip = sharedPref.getString(SettingsActivity.KEY_PREF_IP_ADDRESS, "127.0.0.1");
+                        ip = sharedPref.getString(SettingsActivity.KEY_PREF_IP_ADDRESS, "192.168.122.1");
                         Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
                         i.putExtra("IPAddress", ip);
                         startActivity(i);
@@ -125,83 +120,5 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("main activity power: " + data.getStringExtra("power"));
         }
     }
-
-    // User Defined functions
-    //
-    public void fetchJson(View v){
-        //ip = ipAddress.getText().toString();
-        //new BackgroundTask().execute();
-    }
-
-
-    class BackgroundTask extends AsyncTask<Void, Void, String> {
-
-        String tempString;
-        String strUrl = null;
-
-        @Override
-        protected void onPreExecute() {
-            strUrl = "http://192.168.0.12:80/create_json.php";
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                System.out.println("In doInBackground");
-                System.out.println("IP: " + ip);
-                //URL url = new URL(strUrl);
-                URL url = new URL("http://" + ip + "/create_json.php");
-                System.out.println("URL: " + strUrl);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream             = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader       = new BufferedReader(
-                        new InputStreamReader(
-                                inputStream));
-                StringBuilder stringBuilder = new StringBuilder();
-                while((tempString = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(tempString+"\n");
-                }
-
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-                return stringBuilder.toString().trim();
-
-
-
-            } catch (MalformedURLException e) {
-                System.out.println("Threw MalformedURLException");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.out.println("Threw IOException");
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //TextView tview = (TextView) findViewById(R.id.txtview);
-            //tview.setText(result);
-            json_string = result;
-            if(json_string!=null) {
-                Intent intent = new Intent(getApplicationContext(), QueryResults.class);
-                intent.putExtra("json_string", json_string);
-                startActivity(intent);
-            }
-        }
-    }
-
-
-/*    public void dispJson (View v) {
-        Intent intent = new Intent(this, QueryResults.class);
-        intent.putExtra("json_string", json_string);
-        startActivity(intent);
-    }*/
 
 }
