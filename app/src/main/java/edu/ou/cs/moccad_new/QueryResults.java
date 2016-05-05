@@ -52,7 +52,7 @@ public class QueryResults extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.queryList);
         listView.setAdapter(queryAdapter);
         try {
-            JSON_STRING = sanitizeString(JSON_STRING);
+            //JSON_STRING = sanitizeString(JSON_STRING);
             jsonObject = new JSONObject(JSON_STRING);
             jsonArray = jsonObject.getJSONArray("server_response");
 

@@ -1,11 +1,13 @@
 package edu.ou.cs.moccad_new;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -69,5 +71,46 @@ public class Display_cache extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.cache_query_list);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+
+                String sql = cachedQueries.get(i),
+                       loopSQL,
+                       tupleString = "";
+                Iterator<Query> itr = cache.getCacheContentManager().getEntrySet().iterator();
+                Query cachedQuery = null;
+                while (itr.hasNext())
+                {
+                    cachedQuery = itr.next();
+                    loopSQL = cachedQuery.toSQLString();
+                    if(loopSQL.equals(sql)) {
+                        break;
+                    }
+                    else
+                        cachedQuery = null;
+                }
+
+                List<List<String>> tuples = null;
+                tuples = cache.getCacheContentManager().get(cachedQuery).getTuples();
+
+                Iterator<List<String>> iter1 = tuples.iterator();
+                while(iter1.hasNext())
+                {
+                    Iterator<String> iter2 = iter1.next().iterator();
+                    while(iter2.hasNext())
+                    {
+                        String fieldValue = iter2.next();
+                        tupleString += fieldValue + "|";
+
+                    }
+                    tupleString += "\n";
+                }
+
+                Intent intent = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.tupleViewer.class);
+                intent.putExtra("tuple_string", tupleString);
+                startActivity(intent);
+            }
+        });
     }
 }
