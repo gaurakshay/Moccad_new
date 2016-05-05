@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -18,57 +18,109 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Time"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true" />
 
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/timeSeekBar" />
+        android:id="@+id/timeSeekBar"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/timeNumber"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="0"
+        android:layout_below="@+id/timeSeekBar"
+        android:layout_alignStart="@+id/moneyNumber" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Money"
-        android:id="@+id/textView" />
+        android:id="@+id/textView"
+        android:layout_below="@+id/timeNumber"
+        android:layout_alignParentStart="true" />
 
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/moneySeekBar" />
+        android:id="@+id/moneySeekBar"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/moneyNumber"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="0"
+        android:layout_below="@+id/moneySeekBar"
+        android:layout_alignStart="@+id/energyNumber" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Energy"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:layout_below="@+id/moneyNumber"
+        android:layout_alignParentStart="true" />
 
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/powerSeekBar" />
+        android:id="@+id/powerSeekBar"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/energyNumber"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="0"
+        android:layout_below="@+id/powerSeekBar"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/submit_weights"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/energyNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Money Saver"
+        android:id="@+id/moneySaverButton"
+        android:layout_alignTop="@+id/emergencyProfile"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emergency"
+        android:id="@+id/emergencyProfile"
+        android:layout_marginBottom="57dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Low Power"
+        android:id="@+id/lowPowerProfile"
+        android:layout_alignTop="@+id/moneySaverButton"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

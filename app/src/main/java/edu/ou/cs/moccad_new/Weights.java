@@ -15,7 +15,10 @@ public class Weights extends AppCompatActivity {
     int time = 0,
         money = 0,
         power = 0;
-    Button submitButton;
+    Button submitButton,
+           emergencyProfileButton,
+           moneySaverProfileButton,
+           powerSaverProfileButton;
     private SeekBar timeBar = null,
                     moneyBar = null,
                     powerBar = null;
@@ -159,5 +162,38 @@ public class Weights extends AppCompatActivity {
                         finish();
                     }
                 });
+
+        emergencyProfileButton = (Button) findViewById(R.id.emergencyProfile);
+        emergencyProfileButton.setOnClickListener(
+                new View.OnClickListener(){
+                    public void onClick(View view){
+                        timeBar.setProgress(90);
+                        moneyBar.setProgress(5);
+                        powerBar.setProgress(20);
+                    }
+                }
+        );
+
+        moneySaverProfileButton = (Button) findViewById(R.id.moneySaverButton);
+        moneySaverProfileButton.setOnClickListener(
+                new View.OnClickListener(){
+                    public void onClick(View view){
+                        timeBar.setProgress(5);
+                        moneyBar.setProgress(90);
+                        powerBar.setProgress(20);
+                    }
+                }
+        );
+
+        powerSaverProfileButton = (Button) findViewById(R.id.lowPowerProfile);
+        powerSaverProfileButton.setOnClickListener(
+                new View.OnClickListener(){
+                    public void onClick(View view){
+                        timeBar.setProgress(5);
+                        moneyBar.setProgress(20);
+                        powerBar.setProgress(90);
+                    }
+                }
+        );
     }
 }
