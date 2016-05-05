@@ -23,15 +23,15 @@
 		{
 			$est = $estimationStack[$y];
 			$violate = false;
-			if($est->objTime > $time)
+			if($est->objTime > 10)
 			{
 				$violate = true;
 			}
-			if($est->objMoney > $money)
+			if($est->objMoney > .10)
 			{
 				$violate = true;
 			}
-			if($est->objPower > $power)
+			if($est->objPower > .5)
 			{
 				$violate = true;
 			}
