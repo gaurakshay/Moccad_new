@@ -171,8 +171,8 @@ public class PowerProfile {
      */
     private void readPowerValuesFromXml(Context context) {
         //TODO: implement xml
-        //XmlResourceParser parser = context.getResources().getXml(R.xml.power_profile_htc_one_m7_pvs3);
-        XmlResourceParser parser = context.getResources().getXml(0);
+        XmlResourceParser parser = context.getResources().getXml(R.xml.power_profile_htc_one_m7_pvs3);
+        //XmlResourceParser parser = context.getResources().getXml(0);
         boolean parsingArray = false;
         ArrayList<Double> array = new ArrayList<Double>();
         String arrayName = null;

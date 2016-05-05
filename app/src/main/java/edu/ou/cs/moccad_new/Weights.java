@@ -51,10 +51,16 @@ public class Weights extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         timeBar = (SeekBar)findViewById(R.id.timeSeekBar);
         moneyBar = (SeekBar)findViewById(R.id.moneySeekBar);
         powerBar = (SeekBar)findViewById(R.id.powerSeekBar);
 
+
+        MOCCAD mAppl = (MOCCAD) getApplication();
+        timeBar.setProgress(mAppl.getTime());
+        moneyBar.setProgress(mAppl.getMoney());
+        powerBar.setProgress(mAppl.getPower());
         //timeBar.setOnSeekBarChangeListener(this);
         timeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 

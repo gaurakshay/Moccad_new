@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import edu.ou.cs.cacheprototypelibrary.power.HtcOneM7ulPowerReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         ipAddress   = (EditText)findViewById(R.id.ip_address);
         ipAddress.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
+        final HtcOneM7ulPowerReceiver powerReceiver = HtcOneM7ulPowerReceiver.getInstance();
         queryButton = (Button)findViewById(R.id.queryBuilderButton);
         queryButton.setOnClickListener(
             new View.OnClickListener() {
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else
                     {
+
                         //Try to get the IP address from the preferences.
                         //TODO: It doesn't seem to be working..
                         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(getApplicationContext(), edu.ou.cs.moccad_new.QueryBuilder.class);
                         i.putExtra("IPAddress", ip);
                         startActivity(i);
+
                     }
                 }
             });

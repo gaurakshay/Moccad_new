@@ -30,16 +30,14 @@ public abstract class PowerReceiver extends BroadcastReceiver {
 		{
 			this.mBatteryCapacity = batteryCapacity;
 		}
-		
-		
-		
+
 		Intent batteryIntent = context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		mBatteryLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-		Log.d("BATTERY_STATUS","battery_level: " + mBatteryLevel);
+		Log.i("BATTERY_STATUS","battery_level: " + mBatteryLevel);
 		mBatteryScale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-		Log.d("BATTERY_STATUS","battery_scale: " + mBatteryScale);
+		Log.i("BATTERY_STATUS","battery_scale: " + mBatteryScale);
 		double voltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
-		Log.d("BATTERY_STATUS","battery_voltage: " + voltage);
+		Log.i("BATTERY_STATUS","battery_voltage: " + voltage);
 		
 		if (mBatteryLevel == -1 || mBatteryScale == -1)
 		{
@@ -77,12 +75,14 @@ public abstract class PowerReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+		Log.i("PowerReceiver", "Battery Level: " + mBatteryLevel);
 		mBatteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0);
+		Log.i("PowerReceiver", "Battery Scale: " + mBatteryScale);
 	}
 	
 	public double getBatteryLevel()
 	{
-		return mBatteryLevel*mBatteryCapacity/mBatteryScale;
+		return mBatteryLevel*mBatteryCapacity/(double)mBatteryScale;
 	}
 	
 }

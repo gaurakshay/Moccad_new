@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.net.URLEncoder;
@@ -40,6 +41,7 @@ import edu.ou.cs.cacheprototypelibrary.core.cache.CacheBuilder;
 import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.DataLoader;
 import edu.ou.cs.cacheprototypelibrary.core.cachemanagers.SemanticCacheDataLoader;
 import edu.ou.cs.cacheprototypelibrary.estimationcache.Estimation;
+import edu.ou.cs.cacheprototypelibrary.power.HtcOneM7ulPowerReceiver;
 import edu.ou.cs.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
 import edu.ou.cs.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
 import edu.ou.cs.cacheprototypelibrary.querycache.query.Predicate;
@@ -56,6 +58,7 @@ public class QueryBuilder extends Activity {
     Button executeQuery;
     EditText queryCondition;
     Query q;
+    static Random rand = new Random();
 
     protected void onCreate(Bundle save)
     {
@@ -137,8 +140,12 @@ public class QueryBuilder extends Activity {
                         QuerySegment qs = new QuerySegment();
 
                         BackgroundTask task = new BackgroundTask();
+                        HtcOneM7ulPowerReceiver powerReceiver = HtcOneM7ulPowerReceiver.getInstance();
                         task.getDBInfo = true;
                         String cachedResults = null;
+                        long startTimeMillis = 0;
+                        long stopTimeMillis = 0;
+
 
                         try
                         {
@@ -147,6 +154,8 @@ public class QueryBuilder extends Activity {
                                 //System.out.println("Running query from cache.");
 
                                 Log.i("QueryBuilder", "Running query from cache.");
+                                startTimeMillis = System.currentTimeMillis();
+
 
                                 String template = "{\"server_response\":[{\"Field\":\"%s\"}]}";
                                 List<List<String>> tuples = null;
@@ -165,6 +174,7 @@ public class QueryBuilder extends Activity {
 
                                     }
                                 }
+                                stopTimeMillis = System.currentTimeMillis();
                             }
                             else {
                                 cache.add(q, qs.filter(q));
@@ -174,6 +184,7 @@ public class QueryBuilder extends Activity {
                             runQuery.getDBInfo = false;
                             runQuery.query = QUERY;
                             runQuery.cachedResults = cachedResults;
+                            runQuery.elapsedTime = (double) ((stopTimeMillis - startTimeMillis)/1000);
                             String str_result = runQuery.execute().get(); //Call to doInBackground
                         }
                         catch (InterruptedException e)
@@ -192,6 +203,9 @@ public class QueryBuilder extends Activity {
         boolean getDBInfo = false;
         String query = null;
         String cachedResults = null;
+        double elapsedTime = 0;
+        double powerEstimate = rand.nextDouble()*0.5;
+
 
         @Override
         protected String doInBackground(Void... params) {
@@ -217,7 +231,8 @@ public class QueryBuilder extends Activity {
                         int moneyParam = ((MOCCAD) getApplication()).getMoney();
                         int powerParam = ((MOCCAD) getApplication()).getPower();
                         url = new URL(server + "create_json.php?query=" + encodedURL +
-                                "&time=" + timeParam + "&money=" + moneyParam + "&power=" + powerParam);
+                                "&time=" + timeParam + "&money=" + moneyParam + "&power=" + powerParam +
+                                "&timeEst=" + elapsedTime + "&powerEst=" + powerEstimate);
                     }
                     else
                         return "Error: Query is null.";
@@ -244,12 +259,12 @@ public class QueryBuilder extends Activity {
             }
             catch (MalformedURLException e)
             {
-                System.out.println("Threw MalformedURLException");
+                Log.e("QueryBuilder", "Threw MalformedURLException");
                 e.printStackTrace();
             }
             catch (IOException e)
             {
-                System.out.println("Threw IOException");
+                Log.e("QueryBuilder", "Threw IOException");
                 e.printStackTrace();
             }
             return null;

@@ -41,7 +41,7 @@ import edu.ou.cs.cacheprototypelibrary.utils.StatisticsManager;
 public class MOCCAD extends Application{
 
     private static MOCCAD singleton;
-    int time = 0,
+    private int time = 0,
         money = 0,
         power = 0;
 
@@ -89,7 +89,7 @@ public class MOCCAD extends Application{
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //The class below is used to calculate power usage.
-        //HtcOneM7ulPowerReceiver.init(this);
+        HtcOneM7ulPowerReceiver.init(this);
         mDataAccessProvider = new StubDataAccessProvider();
         mOptimizationParameters = new OptimizationParameters();
 
